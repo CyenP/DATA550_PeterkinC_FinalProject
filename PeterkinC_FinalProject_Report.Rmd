@@ -1,0 +1,79 @@
+---
+title: "DATA 550 Final Project Report: Mapping Police Violence Analysis"
+author: "Cyen Peterkin"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+# Introduction
+The Mapping Police Violence database contains information on civilians killed in incidents where law enforcement officers applied lethal force. The dataset includes variables such as personal information (name, age, available image), socio-demographic details (gender, race), and incident outcomes (location of the incident, responsible agency (police department, sheriff's office, etc.), cause of death, and officer charges).
+
+In this report, I will conduct a crude rate analysis of civilians exhibiting signs of mental illness, stratified by state and gender. The results will be presented through a map visualizing these crude rates. Additionally, Fisher’s exact tests were performed across states to compare the prevalence of reported signs of mental illness between genders.
+
+(https://airtable.com/appzVzSeINK1S3EVR/shroOenW19l1m3w0H/tblxearKzw8W7ViN8)
+
+# Data Load & Processing
+
+```{r, libs, echo=FALSE, message=FALSE, include=FALSE}
+library(rmarkdown)
+library(knitr)
+library(here)
+library(tidycensus) 
+library(tidyverse)
+library(tigris)
+library(sf)
+library(labelled)
+library(gtsummary)
+library(ggiraph)
+```
+
+## Mapping Police Violence
+```{r,data_load}
+here::i_am("PeterkinC_FinalProject_Report.Rmd")
+
+mpv_data <- readRDS(
+  file = here::here("output/mpv_data.rds")
+)
+```
+
+The Mapping Police Violence database has `r nrow(mpv_data)` rows and `r ncol(mpv_data)` columns. 
+
+## American Community Survey (ACS)
+```{r, acs_load, message=FALSE, warning=FALSE,}
+state_pop <- readRDS(
+  file = here::here("output/state_pop.rds")
+)
+```
+
+State population estimates stratified by gender were derived from the American Community Survey 1-year estimates. My created `state_pop` database has `r nrow(state_pop)` rows and `r ncol(state_pop)` columns.
+
+## Data Processing
+Here in my data processing step, I combined the police violence data `mpv_data` with state population estimates from the ACS to calculate crude rates of civilians killed who exhibited signs of mental illness. Only responses of "Yes" were considered in the exhibited signs of mental illness instance count. Counts of victims were aggregated by state and gender, then divided by the respective population to create standardized rates per 100,000 residents.
+```{r, data_processing, message=FALSE, warning=FALSE}
+mental_crude_state <- readRDS(
+  file = here::here("output/mental_crude_state.rds")
+)
+```
+
+# Table 
+The stratified tables below show how the presence of reported signs of mental illness among civilians killed varies by gender across U.S. states. Each table displays counts and percentages for Male and Female victims separately, as well as a statistical test comparing the two groups.
+
+It is worth noting, that in many states, the proportion of male victims exhibiting signs of mental illness is higher than that of females, although the strength of this difference isn't well proven. The only state that observed a statistically significant gender difference and reinforced the idea that male victims disproportionately exhibit signs of mental illness is New Mexico.
+
+```{r, table1, echo=FALSE, warning=FALSE, message=FALSE}
+table_one <- readRDS(
+  file = here:: here("output/table_one.rds")
+)
+table_one
+```
+
+# Map
+Below is an interactive choropleth map displaying the crude rates of mental illness signs by state, faceted by gender. Again, only responses of "Yes" were considered in the exhibited signs of mental illness instance count. By looking at the map, you can see males experience higher crude rates of exhibiting signs of mental illness in comparison to females. 
+```{r, map1, warning=FALSE}
+map_one <- readRDS(
+  file = here::here("output/map_one.rds")
+)
+
+girafe(ggobj = map_one)
+```
+
