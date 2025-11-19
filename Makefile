@@ -28,3 +28,7 @@ everything: output/mpv_data.rds output/state_pop.rds output/mental_crude_state.r
 .PHONY: clean
 clean:
 	rm -f output/*.rds && rm -f *.html
+	
+.PHONY: install
+install: 
+	Rscript -e "renv::restore(prompt = FALSE)"

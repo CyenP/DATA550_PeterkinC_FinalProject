@@ -37,7 +37,11 @@ The Mapping Police Violence database contains information on civilians killed in
 - Renders the `PeterkinC_FinalProject_Report.html` from the `PeterkinC_FinalProject_Report.Rmd`.
 
 # How to Build Final Report
-To build the final report, type `make PeterkinC_FinalProject_Report.html` in terminal. 
+Before building the final report, 
+
+1. Make sure you are in my final project directory.
+2. In the console, run `source(renv/activate.R)` and `renv::restore()`.
+3. In the terminal, run`make PeterkinC_FinalProject_Report.html` to build the final report.
 
 # Contents of Final Report
 The final report contains...
