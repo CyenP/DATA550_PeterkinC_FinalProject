@@ -36,12 +36,28 @@ The Mapping Police Violence database contains information on civilians killed in
 `code/04_render_report.r`
 - Renders the `PeterkinC_FinalProject_Report.html` from the `PeterkinC_FinalProject_Report.Rmd`.
 
+# How to Build & Run the Docker Image
+Link to Docker Image on DockerHub: [https://hub.docker.com/repository/docker/cyenp/last_project_image/general]
+
+To build the Docker image,
+1. In the terminal, run `docker build -t last_project_image`.
+
+To run the Docker image after building it,
+1.  If using a ...
+
+* Windows System: In the terminal, run `MSYS_NO_PATHCONV=1 docker run -it -v "$(pwd -W)/report":/home/rstudio/project/report last_project_image`.
+* Mac System: In the terminal, run `docker run -it -v "$$(pwd)/report":/home/rstudio/project/report last_project_image`.
+
+
 # How to Build Final Report
 Before building the final report, 
 
 1. Make sure you are in my final project directory.
-2. In the console, run `source(renv/activate.R)` and `renv::restore()`.
-3. In the terminal, run`make PeterkinC_FinalProject_Report.html` to build the final report.
+2. To remove the previous generated report - In the terminal, run `make clean2`.
+3. If using a ...
+
+* Windows System: In the terminal, run `make report/PeterkinC_FinalProject_Report.html` to build the final report.
+* Mac System: In the terminal, run `make report/PeterkinC_FinalProject_Report.html_2` to build the final report.
 
 # Contents of Final Report
 The final report contains...

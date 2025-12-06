@@ -1,4 +1,4 @@
-FROM rocker/tidyverse
+FROM rocker/tidyverse:4.3.1 as base
 
 RUN mkdir /home/rstudio/project
 WORKDIR /home/rstudio/project
@@ -7,6 +7,7 @@ RUN mkdir -p renv
 RUN mkdir -p code 
 RUN mkdir -p output 
 RUN mkdir -p raw_data 
+RUN mkdir -p report
 
 COPY code/ code
 COPY Makefile .
@@ -26,5 +27,4 @@ RUN apt-get update && apt-get install -y \
 
 RUN Rscript -e "renv::restore(prompt = FALSE)"
 
-RUN mkdir report 
 CMD make && mv PeterkinC_FinalProject_Report.html report

@@ -1,7 +1,8 @@
+## Project-associated rules
 ## PeterkinC_FinalProject_Report.html:  This is the final report.
 PeterkinC_FinalProject_Report.html: code/04_render_report.r PeterkinC_FinalProject_Report.Rmd everything
 	Rscript code/04_render_report.r
-	
+
 ## output/mpv_data.rds: This is the Mapping Police Violence data load code
 output/mpv_data.rds: code/00_mpv_data_load.r raw_data/MappingPoliceViolence.csv
 	Rscript code/00_mpv_data_load.r
@@ -32,3 +33,23 @@ clean:
 .PHONY: install
 install: 
 	Rscript -e "renv::restore(prompt = FALSE)"
+	
+## Docker-associated rules
+# pulling image off my repo
+.PHONY: image
+image:
+	docker pull cyenp/last_project_image
+
+## rule to build report automatically in the container
+## Windows
+report/PeterkinC_FinalProject_Report.html: image
+	MSYS_NO_PATHCONV=1 docker run --rm -v "$$(pwd)/report":/home/rstudio/project/report cyenp/last_project_image
+
+## Mac
+report/PeterkinC_FinalProject_Report.html_2: image
+	docker run --rm -v "$$(pwd)/report":/home/rstudio/project/report cyenp/last_project_image
+
+
+.PHONY: clean2
+clean2:
+	rm -f report/*.html
